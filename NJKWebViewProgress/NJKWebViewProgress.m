@@ -138,7 +138,11 @@ const float NJKFinalProgressValue = 0.9f;
     
     BOOL isNotRedirect = _currentURL && [_currentURL isEqual:webView.request.mainDocumentURL];
     BOOL complete = [readyState isEqualToString:@"complete"];
-    if (complete && isNotRedirect) {
+    
+    NSString *string = [webView stringByEvaluatingJavaScriptFromString:@"document.documentElement.innerHTML"];
+    BOOL isEmpty = (string==nil || [string length]==0);
+    
+    if ((complete && isNotRedirect) || isEmpty) {
         [self completeProgress];
     }
 }
@@ -163,7 +167,11 @@ const float NJKFinalProgressValue = 0.9f;
     
     BOOL isNotRedirect = _currentURL && [_currentURL isEqual:webView.request.mainDocumentURL];
     BOOL complete = [readyState isEqualToString:@"complete"];
-    if ((complete && isNotRedirect) || error) {
+    
+    NSString *string = [webView stringByEvaluatingJavaScriptFromString:@"document.documentElement.innerHTML"];
+    BOOL isEmpty = (string==nil || [string length]==0);
+    
+    if ((complete && isNotRedirect) || error || isEmpty) {
         [self completeProgress];
     }
 }
